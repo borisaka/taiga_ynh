@@ -16,6 +16,15 @@ sudo yunohost app checkurl $domain$path -a taiga \
 sudo yunohost app checkport $app_port \
     || (echo "Port not available: $app_port" && exit 1)
 
+sudo yunohost app checkport 8011 \
+    || (echo "Port not available: 8011" && exit 1)
+
+sudo yunohost app checkport 5555 \
+    || (echo "Port not available: 5555" && exit 1)
+
+sudo yunohost app checkport 5556 \
+    || (echo "Port not available: 5556" && exit 1)
+
 sudo apt-get install -y build-essential binutils-doc autoconf flex bison libjpeg-dev
 sudo apt-get install -y libfreetype6-dev zlib1g-dev libzmq3-dev libgdbm-dev libncurses5-dev
 sudo apt-get install -y automake libtool libffi-dev curl git tmux gettext
@@ -41,7 +50,7 @@ sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
 sudo cp ../conf/circus.service /etc/systemd/system/circus.service
 sudo systemctl daemon-reload
 sudo yunohost service add circus
-sudo yunohost service add rabbitmq
+sudo yunohost service add rabbitmq-server
 sudo yunohost service add redis-server
 sudo yunohost service add postgresql
 sudo service circus start
