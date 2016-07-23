@@ -1,0 +1,1 @@
+CREATE USER taiga WITH PASSWORD 'taiga'

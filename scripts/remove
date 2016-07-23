@@ -1,0 +1,5 @@
+#!/bin/bash
+sudo rm -rf /var/www/taiga
+sudo rm -f /var/www/nginx/conf.d/taiga.conf
+sudo sudo -u postgres dropdb taiga
+sudo sudo -u postgres dropuser taiga

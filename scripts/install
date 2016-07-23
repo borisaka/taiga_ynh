@@ -1,0 +1,98 @@
+#!/bin/bash
+sudo su
+app=taiga
+app_port=8010
+db_user=$app
+db_password=$app
+db_name=$app
+domain=host.local
+path=$app
+
+start_point=$(pwd)
+install_path=/var/www/$app
+source /usr/share/yunohost/helpers
+
+
+sudo yunohost app checkurl $domain$path -a taiga \
+    || (echo "Path not available: $domain$path" && exit 1)
+
+
+sudo yunohost app checkport $app_port \
+    || (echo "Port not available: $app_port" && exit 1)
+
+########################## Taiga API ##########################################
+sudo apt-get install -y build-essential binutils-doc autoconf flex bison libjpeg-dev
+sudo apt-get install -y libfreetype6-dev zlib1g-dev libzmq3-dev libgdbm-dev libncurses5-dev
+sudo apt-get install -y automake libtool libffi-dev curl git tmux gettext
+
+sudo apt-get install -y postgresql-9.4 postgresql-contrib-9.4
+sudo apt-get install -y postgresql-doc-9.4 postgresql-server-dev-9.4
+
+sudo sudo -u postgres psql -a -f './_create_user.sql'
+sudo sudo -u postgres createdb $db_name -O $db_user
+
+sudo apt-get install -y python3 python3-pip python-dev python3-dev python-pip virtualenvwrapper
+sudo apt-get install libxml2-dev libxslt-dev
+sudo apt-get install -y rabbitmq-server redis-server
+
+sudo su
+mkdir $install_path
+
+cd $install_path
+ git clone https://github.com/taigaio/taiga-back.git taiga-back
+cd taiga-back
+ git checkout stable
+
+
+source /usr/local/bin/virtualenvwrapper.sh
+mkvirtualenv -p /usr/bin/python3.4 taiga'
+pip install -r requirements.txt
+
+# LDAP Auth
+pip install taiga-contrib-ldap-auth
+sudo pip2 install circus
+cd $start_point
+mkdir -p /var/www/taiga/taiga-back/conf
+cp ../conf/circus.ini /var/www/taiga/taiga-back/conf
+sudo cp ../conf/local.py /var/www/taiga/taiga-back/settings
+ga services
+
+cd $install_path/taiga-back
+sudo python manage.py migrate --noinput
+sudo python manage.py compilemessages
+sudo python manage.py collectstatic --noinput
+
+# Rabbit MQ for taiga
+sudo rabbitmqctl add_user taiga taiga
+sudo rabbitmqctl add_vhost taiga-celery
+sudo rabbitmqctl add_vhost taiga-events
+sudo rabbitmqctl set_permissions -p taiga-celerty taiga ".*" ".*" ".*"
+sudo rabbitmqctl set_permissions -p taiga-events taiga ".*" ".*" ".*"
+
+########################## Taiga Frontend ##########################################
+cd $install_path
+sudo git clone https://github.com/taigaio/taiga-front-dist.git taiga-front-dist
+cd taiga-front-dist
+sudo git checkout stable
+cd $start_point
+sudo cp ../conf/taiga-front.json /taiga-front-dist/dist/conf.json
+
+########################### Taiga Events #########################################
+cd $install_path
+sudo git clone https://github.com/taigaio/taiga-events.git taiga-events
+cd taiga-events
+sudo apt-get install -y nodejs nodejs-legacy npm
+sudo npm install
+sudo npm install -g coffee-script
+
+cd $start_point
+sudo mkdir -p /var/log/taiga
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+sudo cp ../conf/circus.service /etc/systemd/system/circus.service
+sudo systemctl daemon-reload
+sudo yunohost service add circus
+sudo yunohost service add rabbitmq
+sudo yunohost service add redis-server
+sudo yunohost service add postgresql
+sudo service circus start
+sudo service nginx reload
