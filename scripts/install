@@ -36,13 +36,13 @@ sudo app=$app start_point=$start_point install_path=$install_path bash ./install
 sudo app=$app start_point=$start_point install_path=$install_path bash ./installers/events.bash
 
 cd $start_point
-mkdir -p /var/log/taiga
-cp ../conf/nginx.conf /etc/nginx/conf.d/$domain/$app.conf
-cp ../conf/circus.service /etc/systemd/system/circus.service
-systemctl daemon-reload
-yunohost service add circus
-yunohost service add rabbitmq
-yunohost service add redis-server
-yunohost service add postgresql
-service circus start
-service nginx reload
+sudo mkdir -p /var/log/taiga
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain/$app.conf
+sudo cp ../conf/circus.service /etc/systemd/system/circus.service
+sudo systemctl daemon-reload
+sudo yunohost service add circus
+sudo yunohost service add rabbitmq
+sudo yunohost service add redis-server
+sudo yunohost service add postgresql
+sudo service circus start
+sudo service nginx reload
