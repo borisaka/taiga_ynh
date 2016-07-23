@@ -4,8 +4,8 @@ After=syslog.target network.target nss-lookup.target
 
 [Service]
 Type=simple
-ExecReload=/usr/bin/circusctl reload
-ExecStart=/usr/bin/circusd /var/www/taiga/taiga-back/conf/circus.ini
+ExecReload=/usr/local/bin/circusctl reload
+ExecStart=/usr/local/bin/circusd /var/www/taiga/taiga-back/conf/circus.ini
 Restart=always
 RestartSec=5
 
