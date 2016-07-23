@@ -2,7 +2,7 @@
 app=taiga
 app_port=8010
 domain=host.local
-path=$app
+path=/$app
 
 start_point=$(pwd)
 install_path=/var/www/$app
