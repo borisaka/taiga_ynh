@@ -37,7 +37,7 @@ sudo app=$app start_point=$start_point install_path=$install_path bash ./install
 
 cd $start_point
 sudo mkdir -p /var/log/taiga
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain/$app.conf
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
 sudo cp ../conf/circus.service /etc/systemd/system/circus.service
 sudo systemctl daemon-reload
 sudo yunohost service add circus
@@ -46,3 +46,4 @@ sudo yunohost service add redis-server
 sudo yunohost service add postgresql
 sudo service circus start
 sudo service nginx reload
+sudo yunohost app ssowatconf
