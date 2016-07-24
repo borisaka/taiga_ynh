@@ -1,4 +1,5 @@
 #!/bin/bash
+sudo service circus stop
 sudo rm -rf /var/www/taiga
 sudo rm -f /var/www/nginx/conf.d/taiga.conf
 sudo rmvirtualenv taiga
@@ -9,3 +10,4 @@ sudo sudo -u postgres dropuser taiga
 sudo rabbitmqctl delete_user taiga
 sudo rabbitmqctl delete_vhost taiga-celery
 sudo rabbitmqctl delete_vhost taiga-events
+sudo yunohost app ssowatconf
