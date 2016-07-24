@@ -48,12 +48,13 @@ BROKER_URL = 'amqp://taiga:taiga@localhost:5672/taiga-celery'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/taiga-celery'
 CELERY_ENABLED = True
 
+EVENTS_PUSH_BACKEND = "taiga.events.backends.rabbitmq.EventsPushBackend"
+EVENTS_PUSH_BACKEND_OPTIONS = {"url": "amqp://taiga:taiga@localhost:5672/taiga-events"}
+
 # LDAP
 
 INSTALLED_APPS += ["taiga_contrib_ldap_auth"]
 
-EVENTS_PUSH_BACKEND = "taiga.events.backends.rabbitmq.EventsPushBackend"
-EVENTS_PUSH_BACKEND_OPTIONS = {"url": "amqp://taiga:taiga@localhost:5672/taiga-events"}
 
 LDAP_SERVER = 'ldap://localhost'
 LDAP_PORT = 389
