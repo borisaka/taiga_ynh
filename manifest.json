@@ -1,10 +1,12 @@
 {
-    "name": "Taiga project manager",
+    "name": "Taiga",
     "id": "taiga",
     "packaging_format": 1,
     "description": {
-        "en": "Example package for YunoHost application."
+        "en": "Taiga project managment"
     },
+    "url": "http://ihatemoney.org/",
+
     "license": "free",
     "maintainer": {
         "name": "John doe",
@@ -20,7 +22,8 @@
         "postgresql",
         "redis-server",
         "rabbitmq",
-        "circus"
+        "circus",
+        "postfix"
     ],
     "arguments": {
         "install" : [

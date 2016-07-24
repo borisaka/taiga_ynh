@@ -1,5 +1,11 @@
 #!/bin/bash
 sudo rm -rf /var/www/taiga
 sudo rm -f /var/www/nginx/conf.d/taiga.conf
+sudo rmvirtualenv taiga
 sudo sudo -u postgres dropdb taiga
 sudo sudo -u postgres dropuser taiga
+
+#Rabbitmq
+sudo rabbitmqctl delete_user taiga
+sudo rabbitmqctl delete_vhost taiga-celery
+sudo rabbitmqctl delete_vhost taiga-events

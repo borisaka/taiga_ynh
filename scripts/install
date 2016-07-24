@@ -12,6 +12,21 @@ source /usr/share/yunohost/helpers
 sudo yunohost app checkurl $domain$path -a taiga \
     || (echo "Path not available: $domain$path" && exit 1)
 
+sudo yunohost app checkurl $domain$path/api -a taiga \
+    || (echo "Path not available: $domain$path/api" && exit 1)
+
+
+sudo yunohost app checkurl $domain$path/admin -a taiga \
+    || (echo "Path not available: $domain$path/admin" && exit 1)
+
+sudo yunohost app checkurl $domain$path/events -a taiga \
+    || (echo "Path not available: $domain$path/events" && exit 1)
+
+sudo yunohost app checkurl $domain$path/media -a taiga \
+    || (echo "Path not available: $domain$path/media" && exit 1)
+
+sudo yunohost app checkurl $domain$path/static -a taiga \
+    || (echo "Path not available: $domain$path/static" && exit 1)
 
 sudo yunohost app checkport $app_port \
     || (echo "Port not available: $app_port" && exit 1)
