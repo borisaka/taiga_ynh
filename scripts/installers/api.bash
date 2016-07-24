@@ -11,7 +11,6 @@ git clone https://github.com/taigaio/taiga-back.git taiga-back
 cd taiga-back
 git checkout stable
 
-
 source /usr/local/bin/virtualenvwrapper.sh
 mkvirtualenv -p /usr/bin/python3.4 taiga
 pip install -r requirements.txt
@@ -25,6 +24,7 @@ cp ../conf/local.py /var/www/taiga/taiga-back/settings
 # ga services
 
 cd $install_path/taiga-back
+source /root/.virtualenvs/taiga/bin/activate
 python manage.py migrate --noinput
 python manage.py compilemessages
 python manage.py collectstatic --noinput
@@ -33,5 +33,5 @@ python manage.py collectstatic --noinput
 rabbitmqctl add_user taiga taiga
 rabbitmqctl add_vhost taiga-celery
 rabbitmqctl add_vhost taiga-events
-rabbitmqctl set_permissions -p taiga-celerty taiga ".*" ".*" ".*"
+rabbitmqctl set_permissions -p taiga-celery taiga ".*" ".*" ".*"
 rabbitmqctl set_permissions -p taiga-events taiga ".*" ".*" ".*"
